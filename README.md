@@ -9,6 +9,7 @@ En esta guía se presenta un paso a paso para desplegar una instancia de Kasten,
 3. [Configuración de una Location de IBM Cloud Object Storage](#configuración-de-una-location-de-ibm-cloud-object-storage-☁️)
 4. [Creación y ejecución de una política de Backup](#creación-y-ejecución-de-una-política-de-backup-🧳)
 5. [Restauración de un Backup alojado en IBM Cloud Object Storage](#restauración-de-un-backup-alojado-en-ibm-cloud-object-storage-📂)
+6. [consideraciones importantes](#consideraciones-importantes-📌)
 4. [Referencias](#referencias-📄)
 4. [Autores](#autores-black_nib)
 
@@ -45,6 +46,7 @@ curl https://docs.kasten.io/tools/k10_primer.sh | bash
 ```
 
 5. Ahora, se instalará Kasten en el clúster, para lo cual debe ingresar el siguiente comando:
+Para clústers que no se encuentren alojados en la nube, use [este comando](#clústers-on-premise-ibm-satellite)
 
 ```
 helm install k10 kasten/k10 --namespace=kasten-io --set scc.create=true --set route.enabled=true --set route.path="/k10" --set auth.tokenAuth.enabled=true
@@ -123,7 +125,53 @@ Para almacenar los backups que se van a generar se usará una instancia de IBM C
 
 ## Restauración de un Backup alojado en IBM Cloud Object Storage :open_file_folder:
 
-1. Ingrese al 
+Para restaurar un backup realizado previamente en otro cluster, repita los pasos de las tres primeras secciones de la guía en el clúster en el que desea restaurar el backup:
+1. [Pre-Requisitos](#pre-requisitos-pencil)
+2. [Instalación de Kasten en Red Hat Openshift](#instalación-de-kasten-en-red-hat-openshift-⚙️)
+3. [Configuración de una Location de IBM Cloud Object Storage](#configuración-de-una-location-de-ibm-cloud-object-storage-☁️)
+
+Luego de haber repetido los pasos anteriores en el nuevo clúster, ingrese al dashboard del kasten recién instalado.
+
+1. Dé click en **policies > create new policy**
+2. Diligencie el formulario de la siguiente forma:
+- **Name**: Asigne un nombre para su política de backup
+- **Action**: Import
+- **Restore After Import**: Habilite esta opción
+- **Import Frequency**: Seleccione la frecuencia con la que quiere realizar snapshots, en este caso se selecciona **On Demand**
+- **Config Data for Import**: ingrese la cadena de texto que guardó cuando realizó el backup
+- **Profile for Import**: Seleccione el perfil de storage que configuró previamente. Recuerde que debe ser el mismo storage en el que almacenó el backup en primer lugar. 
+
+3. Seleccione **Create Policy**, y del mismo modo que generó el backup, dé click en **run once**, en el dashboard podrá ver el avance en la restauración de la aplicación. Cuando esta se complete, podrá verificar en su clúster que ahora existe un namespace con el mismo nombre y los mismos contenidos de la aplicación que tenía en el clúster anterior.
+
+<img width="800" alt="" src="img/dashboard.png"> 
+
+## Consideraciones importantes :pushpin:
+
+### Token de Ingreso
+Si no tiene acceso a su token de ingreso a través de la consola de Openshift, puede obtenerlo desde la línea de comandos:
+
+```
+oc whoami --show-token
+```
+
+### Clústers On-Premise (IBM Satellite)
+En caso de que su clúster de Openshift no esté desplegado en IBM Cloud sino en un ambiente on-premise, como lo es Satellite, el comando de instalación varía un poco:
+
+```
+helm install k10 kasten/k10 --namespace=kasten-io --set scc.create=true --set route.enabled=true --set route.path="/k10" --set auth.tokenAuth.enabled=true   --set global.persistence.storageClass=<NOMBRE_DE_LA_STORAGE_CLASS>
+```
+
+Por ejemplo, si su clúster se encuentra en Satellite con un almacenamiento local-file, el comando sería:
+```
+helm install k10 kasten/k10 --namespace=kasten-io --set scc.create=true --set route.enabled=true --set route.path="/k10" --set auth.tokenAuth.enabled=true   --set global.persistence.storageClass=sat-local-file-gold
+```
+
+### Desinstalación
+Si desea realizar una desinstalación limpia de Kasten, use este comando:
+```
+helm uninstall k10 --namespace=kasten-io
+```
+
 
 ## Referencias :page_facing_up:
 - [https://docs.kasten.io/latest/install/requirements.html](https://docs.kasten.io/latest/install/requirements.html)
