@@ -166,6 +166,8 @@ Por ejemplo, si su clúster se encuentra en Satellite con un almacenamiento loca
 helm install k10 kasten/k10 --namespace=kasten-io --set scc.create=true --set route.enabled=true --set route.path="/k10" --set auth.tokenAuth.enabled=true   --set global.persistence.storageClass=sat-local-file-gold
 ```
 
+Adicionalmente, tenga en cuenta que para esta instalación necesita attachar 6 instancias de 20GB de File Storage en sus máquinas, para permitir la persistencia de información de los microservicios de la aplicación. Para más detalles del proceso de configuración de File Storage, remítase a [esta guía](https://github.com/emeloibmco/IBM-Cloud-Satellite-Configuracion)
+
 ### Desinstalación
 Si desea realizar una desinstalación limpia de Kasten, use este comando:
 ```
