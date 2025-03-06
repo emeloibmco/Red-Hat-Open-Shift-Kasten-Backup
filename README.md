@@ -6,12 +6,13 @@ En esta guía se presenta un paso a paso para desplegar una instancia de Kasten,
 ## Contenido
 1. [Pre-Requisitos](#pre-requisitos-pencil)
 2. [Instalación de Kasten en Red Hat Openshift](#instalación-de-kasten-en-red-hat-openshift-⚙️)
-3. [Configuración de una Location de IBM Cloud Object Storage](#configuración-de-una-location-de-ibm-cloud-object-storage-☁️)
-4. [Creación y ejecución de una política de Backup](#creación-y-ejecución-de-una-política-de-backup-🧳)
-5. [Restauración de un Backup alojado en IBM Cloud Object Storage](#restauración-de-un-backup-alojado-en-ibm-cloud-object-storage-📂)
-6. [consideraciones importantes](#consideraciones-importantes-📌)
-4. [Referencias](#referencias-📄)
-4. [Autores](#autores-black_nib)
+3. [Instalacion alternativa por Operadores.](#Instalacion-alternativa-por-Operadores.)  
+4. [Configuración de una Location de IBM Cloud Object Storage](#configuración-de-una-location-de-ibm-cloud-object-storage-☁️)
+5. [Creación y ejecución de una política de Backup](#creación-y-ejecución-de-una-política-de-backup-🧳)
+6. [Restauración de un Backup alojado en IBM Cloud Object Storage](#restauración-de-un-backup-alojado-en-ibm-cloud-object-storage-📂)
+7. [consideraciones importantes](#consideraciones-importantes-📌)
+8. [Referencias](#referencias-📄)
+9. [Autores](#autores-black_nib)
 
 ## Pre-Requisitos :pencil:
 - Contar con un clúster de Openshift en [IBM Cloud](https://cloud.ibm.com/kubernetes/catalog/create?platformType=openshift&catalog_query=aHR0cHM6Ly9jbG91ZC5pYm0uY29tL2NhdGFsb2c%2FY2F0ZWdvcnk9Y29udGFpbmVycw%3D%3D)
@@ -71,6 +72,29 @@ helm install k10 kasten/k10 --namespace=kasten-io --set scc.create=true --set ro
 
 10. Con esto queda finalizada la instalación de Kasten en Red Hat Openshift.
 
+## Instalacion alternativa por Operadores
+
+1. Ingrese al Operator hub y procesada a buscar kasten.
+
+![image](https://github.com/user-attachments/assets/08062075-fb35-4c94-90f5-fdec37d9b8c5)
+
+2. Instale el operador seleccionándolo de la lista de operadores disponibles.
+
+![image](https://github.com/user-attachments/assets/c45a77fd-4746-4e8d-a14a-45f86db9a4cf)
+
+3. Una vez instalado, búsquelo en el proyecto kasten-io para verificar su disponibilidad.
+
+![image](https://github.com/user-attachments/assets/be879ca3-9fd0-4b09-8c12-ac5364705a3f)
+
+
+5. Proceda a crear un instancia de K10.
+
+![image](https://github.com/user-attachments/assets/cfbc6946-6ef8-412a-bb42-1b7532af6c3b)
+
+
+6. Utilice la siguiente configuracion para crear el K10.
+
+![image](https://github.com/user-attachments/assets/36a2cd40-b7a4-406c-b75c-aa02fee4a9f0)
 
 ## Configuración de una Location de IBM Cloud Object Storage :cloud:
 
